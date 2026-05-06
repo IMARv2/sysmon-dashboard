@@ -1,0 +1,25 @@
+[Unit]
+Description=Home Lab Dashboard
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=imar
+Group=imar
+WorkingDirectory=/home/imar/dashboard
+EnvironmentFile=/home/imar/dashboard/.env
+ExecStart=/home/imar/dashboard/start.sh
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/home/imar/dashboard /srv/shared
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

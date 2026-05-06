@@ -1,0 +1,8 @@
+# Drop this file into /etc/sudoers.d/dashboard
+# Allows the dashboard process to run nmap for network scanning
+# without a full sudo password prompt.
+#
+# Install: sudo cp /home/imar/dashboard/sudoers.dashboard /etc/sudoers.d/dashboard
+#          sudo chmod 440 /etc/sudoers.d/dashboard
+#
+imar ALL=(ALL) NOPASSWD: /usr/bin/nmap -sn --host-timeout 5s 10.22.11.0/24

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Lab — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+      --bg:           #0d1117;
+      --bg-secondary: #161b22;
+      --surface:      #1c2333;
+      --surface-2:    #21262d;
+      --border:       #30363d;
+      --border-hover: #484f58;
+      --text:         #e6edf3;
+      --text-secondary: #8b949e;
+      --text-muted:   #6e7681;
+      --emerald:      #10b981;
+      --emerald-dim:  rgba(16,185,129,.12);
+      --emerald-glow: rgba(16,185,129,.3);
+      --indigo:       #6366f1;
+      --rose:         #f43f5e;
+      --rose-dim:     rgba(244,63,94,.12);
+      --radius:       10px;
+      --radius-sm:    6px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background grid pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(16,185,129,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16,185,129,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Glow blob */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(16,185,129,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(16,185,129,.08);
+      animation: cardIn .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo */
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: var(--emerald-dim);
+      border: 1px solid rgba(16,185,129,.3);
+      border-radius: 14px;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 20px var(--emerald-glow);
+    }
+
+    .login-logo svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--emerald);
+    }
+
+    .login-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: -.3px;
+    }
+
+    .login-sub {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-family: var(--font-mono);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      margin-bottom: 7px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--emerald);
+      box-shadow: 0 0 0 3px var(--emerald-dim);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .error-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--rose-dim);
+      border: 1px solid rgba(244,63,94,.25);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--rose);
+      margin-bottom: 18px;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 11px;
+      background: var(--emerald);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, box-shadow .2s, transform .1s;
+      margin-top: 8px;
+      letter-spacing: .2px;
+    }
+
+    .btn-login:hover {
+      opacity: .9;
+      box-shadow: 0 4px 16px var(--emerald-glow);
+    }
+
+    .btn-login:active {
+      transform: scale(.98);
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .login-footer span {
+      color: var(--emerald);
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider span {
+      font-size: 10px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <!-- Logo -->
+    <div class="login-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="4" rx="1"/>
+        <rect x="2" y="10" width="20" height="4" rx="1"/>
+        <rect x="2" y="17" width="20" height="4" rx="1"/>
+        <circle cx="18" cy="5" r="1" fill="currentColor"/>
+        <circle cx="18" cy="12" r="1" fill="currentColor"/>
+        <circle cx="18" cy="19" r="1" fill="currentColor" opacity=".4"/>
+      </svg>
+    </div>
+
+    <div class="login-title">Home Lab</div>
+    <div class="login-sub">{{ server_ip }} &nbsp;·&nbsp; Dashboard</div>
+
+    <!-- Error -->
+    {% if error %}
+    <div class="error-msg">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/>
+      </svg>
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Form -->
+    <form method="POST" action="/login" autocomplete="off">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-input" type="text" id="username" name="username"
+               placeholder="enter username" autocomplete="username" autofocus />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" name="password"
+               placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="btn-login" type="submit">Sign In</button>
+    </form>
+
+    <div class="divider"><span>secure access</span></div>
+
+    <div class="login-footer">
+      Protected by session auth &nbsp;·&nbsp; <span>Home Lab v1.0</span>
+    </div>
+  </div>
+
+  <script>
+    // Auto-clear error after 5s
+    const err = document.querySelector('.error-msg');
+    if (err) setTimeout(() => err.style.opacity = '0', 5000);
+  </script>
+</body>
+</html>

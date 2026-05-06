@@ -1,0 +1,9 @@
+bind         = "0.0.0.0:5000"
+workers      = 1          # Must be 1 — app uses in-memory shared state (history, devices)
+worker_class = "eventlet" # Required for flask-socketio WebSocket support
+timeout      = 120
+keepalive    = 5
+accesslog    = "/home/imar/dashboard/access.log"
+errorlog     = "/home/imar/dashboard/dashboard.log"
+loglevel     = "info"
+reload       = False
