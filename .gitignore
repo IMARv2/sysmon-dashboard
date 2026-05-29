@@ -20,3 +20,6 @@ venv/
 
 # Claude Code local settings (may contain tokens)
 .claude/settings.local.json
+
+# Internal documentation (contains network topology & IPs)
+NOTES.md

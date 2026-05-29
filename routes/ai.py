@@ -1,5 +1,6 @@
 # routes/ai.py — AI task log and Qwen bridge
 import json
+import os
 import datetime
 import time as _time
 import urllib.request as _ur
@@ -9,7 +10,8 @@ from utils import login_required
 
 bp = Blueprint('ai', __name__)
 
-AI_TASK_LOG = "/home/imar/qwen-bridge/task_log.jsonl"
+AI_TASK_LOG = os.environ.get("QWEN_TASK_LOG", "/home/imar/qwen-bridge/task_log.jsonl")
+_OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 
 
 @bp.route("/api/ai/tasks")
@@ -32,7 +34,7 @@ def api_ai_tasks():
 @login_required
 def api_ai_models():
     try:
-        req = _ur.Request("http://10.22.11.11:11434/api/tags")
+        req = _ur.Request(f"{_OLLAMA_HOST}/api/tags")
         with _ur.urlopen(req, timeout=5) as resp:
             data = json.loads(resp.read().decode())
         models = [{"name": m["name"], "size_gb": round(m["size"] / 1e9, 1),
@@ -56,7 +58,7 @@ def api_ai_ask():
     if system:
         payload["system"] = system
     data = json.dumps(payload).encode()
-    req  = _ur.Request("http://10.22.11.11:11434/api/generate",
+    req  = _ur.Request(f"{_OLLAMA_HOST}/api/generate",
                        data=data, headers={"Content-Type": "application/json"}, method="POST")
     t0 = _time.time()
     try:
